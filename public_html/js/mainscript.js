@@ -1,6 +1,5 @@
     var gameManager = null;
 
-
     var Canvas = {
         canvas: null,
         ctx: null,
@@ -45,7 +44,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         
         Canvas.init();
-        console.log('Canvas initialized: '+Canvas.width+":" +Canvas.height);
+        //console.log('Canvas initialized: '+Canvas.width+":" +Canvas.height);
         
         gameManager = new GameManager();
         gameManager.init();

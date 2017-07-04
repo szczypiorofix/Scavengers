@@ -13,5 +13,7 @@ Player.prototype.update = function(){
 };
 
 Player.prototype.draw = function(ctx){
-    ctx.drawImage(this.image, this.x, this.y, this.width * this.scale, this.height * this.scale);
+    
+    ctx.drawImage(this.image, Canvas.width / 2, Canvas.height / 2, this.width * this.scale, this.height * this.scale);
+
 };
