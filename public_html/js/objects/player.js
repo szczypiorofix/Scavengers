@@ -1,13 +1,18 @@
 
-function Player(image, x, y, width, height) {
-    GameObject.call(this, image, x, y, width, height);
+function Player(image, x, y, width, height, weight) {
+    this.speedX = 0;
+    this.speedY = 0;
+    GameObject.call(this, image, x, y, width, height, weight);
 }
 
 Player.prototype = Object.create(GameObject.prototype);
 Player.prototype.constructor = Player;
 
 
-Player.prototype.update = function(){
+Player.prototype.update = function() {
+    
+    //if (this.speedY < this.gravity) this.speedY += this.weight;
+    
     this.x += this.speedX;
     this.y += this.speedY;
 };
@@ -23,5 +28,4 @@ Player.prototype.getTileY = function(offset) {
 
 Player.prototype.draw = function(ctx){
     ctx.drawImage(this.image, Canvas.width / 2, Canvas.height / 2, this.width, this.height);
-
 };
