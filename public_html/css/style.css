@@ -10,8 +10,17 @@ html, body {
 
 .gamecanvasdiv {
     background-color: #222;
-    width: 800px;
-    height: 600px;
-    margin: 0 auto;
-    margin-top: 40px;
+    width: 100%;
+    height: auto;
+    
+}
+
+#gamecanvas {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
 }
