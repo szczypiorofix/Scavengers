@@ -10,6 +10,6 @@ Ground.prototype.constructor = Ground;
 Ground.prototype.update = function(){
 };
 
-Ground.prototype.draw = function(ctx){
-    ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+Ground.prototype.draw = function(ctx, offsetX, offsetY){
+    ctx.drawImage(this.image, this.x + offsetX, this.y + offsetY, this.width, this.height);
 };

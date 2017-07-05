@@ -4,7 +4,6 @@ function GameObject(image, x, y, width, height, weight) {
     this.width = width;
     this.height = height;
     this.image = image;
-
     this.gravity = 20;
     this.weight = weight || 0;
 }
@@ -12,7 +11,7 @@ function GameObject(image, x, y, width, height, weight) {
 GameObject.prototype.update = function() {
 };
 
-GameObject.prototype.draw = function(ctx) {
+GameObject.prototype.draw = function(ctx, offsetX, offsetY) {
 };
 
 GameObject.prototype.collision = function(ob1) {

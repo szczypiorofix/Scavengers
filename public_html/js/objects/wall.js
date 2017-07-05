@@ -8,10 +8,9 @@ Wall.prototype.constructor = Wall;
 
 
 Wall.prototype.update = function(){
-    
 };
 
-Wall.prototype.draw = function(ctx){
-    ctx.drawImage(this.image, this.x, this.y, this.width, this.height);
+Wall.prototype.draw = function(ctx, offsetX, offsetY){
+    ctx.drawImage(this.image, this.x + offsetX, this.y + offsetY, this.width, this.height);
 };
 

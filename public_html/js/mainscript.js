@@ -18,9 +18,9 @@
             
             this.scale = this.height / this.tilesOnHeight;
             console.log('Canvas scale: ' +this.scale);
-            this.ctx.msImageSmoothingEnabled = false;
-            this.ctx.mozImageSmoothingEnabled = false;
-            this.ctx.webkitImageSmoothingEnabled = false;
+            //this.ctx.msImageSmoothingEnabled = false;
+            //this.ctx.mozImageSmoothingEnabled = false;
+            //this.ctx.webkitImageSmoothingEnabled = false;
             this.ctx.imageSmoothingEnabled = false;
             
             var self = this;
