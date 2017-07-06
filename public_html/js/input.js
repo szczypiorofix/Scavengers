@@ -5,6 +5,10 @@ var Input = function() {
     this.keyUp = keyboard(38);
     this.keyDown = keyboard(40);
     this.keyCTRL = keyboard(17);
+    this.key_W = keyboard(87);
+    this.key_S = keyboard(83);
+    this.key_D = keyboard(68);
+    this.key_A = keyboard(65);
     
     function keyboard(keyCode) {
         var key = {};

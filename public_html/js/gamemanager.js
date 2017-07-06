@@ -8,7 +8,7 @@ function GameManager() {
         '.........................................................................',
         '.........................................................................',
         '.....................|...................................................',
-        '............_...,....|..,................................................',
+        '............_...,....|...................................................',
         '.....................|...................................................',
         '.........700000000000000001..............................................',
         '.........544444444444444443..............................................',
@@ -40,7 +40,11 @@ function GameManager() {
     this.fieldsToRight = 0;
     this.fieldsToTop = 0;
     this.fieldsToBottom = 0;
-     
+    
+    this.self = null;
+    this.mx = 0;
+    this.my = 0;
+    
     this.background = [];
     
     this.camera = null;
@@ -56,21 +60,21 @@ GameManager.prototype.inputFromKeyboard = function() {
     this.player.speedX = 0;
     this.player.speedY = 0;
     
-    if (this.input.keyRight.isDown && this.player.getTileX(0) < this.background[0].length-1) {
+    if ((this.input.keyRight.isDown || this.input.key_D.isDown) && this.player.getTileX(0) < this.background[0].length-1) {
         this.player.speedX = this.playerSpeed;
     }
-    if (this.input.keyLeft.isDown && this.player.getTileX(0) > 0) {
+    if ((this.input.keyLeft.isDown || this.input.key_A.isDown) && this.player.getTileX(0) > 0) {
         this.player.speedX = -this.playerSpeed;
     }
-    if (this.input.keyDown.isDown && this.player.getTileY(0) < this.background.length-1) {
+    if ((this.input.keyDown.isDown || this.input.key_S.isDown) && this.player.getTileY(0) < this.background.length-1) {
         this.player.speedY = this.playerSpeed;
     }
-    if (this.input.keyUp.isDown && this.player.getTileY(0) > 0) {
+    if ((this.input.keyUp.isDown || this.input.key_W.isDown) && this.player.getTileY(0) > 0) {
         this.player.speedY = -this.playerSpeed;
     }
     
-    if (!this.input.keyRight.isDown && !this.input.keyLeft.isDown) this.player.speedX = 0;
-    if (!this.input.keyDown.isDown && !this.input.keyUp.isDown) this.player.speedY = 0;
+    if (!this.input.keyRight.isDown && !this.input.key_D.isDown && !this.input.keyLeft.isDown && !this.input.key_A.isDown) this.player.speedX = 0;
+    if (!this.input.keyDown.isDown && !this.input.key_W.isDown && !this.input.keyUp.isDown && !this.input.key_S.isDown) this.player.speedY = 0;
 };
 
 GameManager.prototype.updateCollection = function(c) {
@@ -111,41 +115,48 @@ GameManager.prototype.draw = function(ctx) {
                 this.background[j + this.player.getTileY(0)][i + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
             }
             else {
-
-                // PRAWY GORNY
-                if (this.player.getTileX(i) > this.background[0].length && this.player.getTileY(j) < 0) {
-                    this.background[j + this.fieldsToTop + this.fieldsToBottom + this.player.getTileY(0)][i - this.fieldsToLeft - this.fieldsToRight + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
-                }
-
-                // PRAWY DOLNY
-                if (this.player.getTileX(i) > this.background[0].length && this.player.getTileY(j) > this.background.length) {
-                    this.background[j - this.fieldsToTop - this.fieldsToBottom + this.player.getTileY(0)][i - this.fieldsToLeft - this.fieldsToRight + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
-                }
-                // LEWY
-                if (this.player.getTileX(i) < 0) {
-                    this.background[j + this.player.getTileY(0)][i + this.fieldsToLeft + this.fieldsToRight + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
-                    // LEWY DOLNY
-                    if (this.player.getTileX(i) < 0 && this.player.getTileY(j) > this.background.length) {
-                        this.background[j - this.fieldsToTop - this.fieldsToBottom + this.player.getTileY(0)][i + this.fieldsToLeft + this.fieldsToRight + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
-                    }
-                    // LEWY GÓRNY
-                    if (this.player.getTileX(i) < 0 && this.player.getTileY(j) < 0) {
-                        this.background[this.fieldsToTop + this.fieldsToBottom + this.player.getTileY(0)][i + this.fieldsToLeft + this.fieldsToRight + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
-                    }
-                } else
-                // GÓRA
-                if (this.player.getTileY(j) < 0) {
-                    this.background[j + this.fieldsToTop + this.fieldsToBottom + this.player.getTileY(0)][i + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
-                }
-                // DÓŁ
-                if (this.player.getTileY(j) > this.background.length) {
-                    this.background[j - this.fieldsToTop - this.fieldsToBottom + this.player.getTileY(0)][i + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
-                }
-                
+//
+//                // PRAWY GORNY
+//                if (this.player.getTileX(i) > this.background[0].length && this.player.getTileY(j) < 0) {
+//                    this.background[j + this.fieldsToTop + this.fieldsToBottom + this.player.getTileY(0)][i - this.fieldsToLeft - this.fieldsToRight + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+//                }
+//
+//                // PRAWY DOLNY
+//                if (this.player.getTileX(i) > this.background[0].length && this.player.getTileY(j) > this.background.length) {
+//                    this.background[j - this.fieldsToTop - this.fieldsToBottom + this.player.getTileY(0)][i - this.fieldsToLeft - this.fieldsToRight + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+//                }
+//                // LEWY
+//                if (this.player.getTileX(i) < 0) {
+//                    this.background[j + this.player.getTileY(0)][i + this.fieldsToLeft + this.fieldsToRight + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+//                    // LEWY DOLNY
+//                    if (this.player.getTileX(i) < 0 && this.player.getTileY(j) > this.background.length) {
+//                        this.background[j - this.fieldsToTop - this.fieldsToBottom + this.player.getTileY(0)][i + this.fieldsToLeft + this.fieldsToRight + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+//                    }
+//                    // LEWY GÓRNY
+//                    if (this.player.getTileX(i) < 0 && this.player.getTileY(j) < 0) {
+//                        this.background[this.fieldsToTop + this.fieldsToBottom + this.player.getTileY(0)][i + this.fieldsToLeft + this.fieldsToRight + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+//                    }
+//                } else
+//                // GÓRA
+//                if (this.player.getTileY(j) < 0) {
+//                    this.background[j + this.fieldsToTop + this.fieldsToBottom + this.player.getTileY(0)][i + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+//                }
+//                // DÓŁ
+//                if (this.player.getTileY(j) > this.background.length) {
+//                    this.background[j - this.fieldsToTop - this.fieldsToBottom + this.player.getTileY(0)][i + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+//                }
+//                
             }
         }
     }
     this.player.draw(ctx, -this.camera.x, -this.camera.y);
+    
+    ctx.beginPath();
+    ctx.moveTo(this.mx * 1.1, this.my * 1.1);
+    //Canvas.ctx.moveTo(Canvas.width/2, Canvas.height/2);
+    ctx.lineTo((this.player.x + this.player.width/2) - this.camera.x, (this.player.y +this.player.height/2) - this.camera.y);
+    //ctx.rect(100, 100, this.player.x - this.camera.x, this.player.y-this.camera.y);
+    ctx.stroke();
 };
 
 
@@ -166,6 +177,13 @@ GameManager.prototype.loadLevel = function(level) {
     this.camera = new Camera(0, 0);
     
     this.player = new Player(Sprites.player_image, Canvas.scale * 15 , Canvas.scale * 8, Canvas.scale, Canvas.scale, 0.2);
+    var self = this;
+    
+    Canvas.canvas.addEventListener('mousemove', function(event) {
+        var rect = Canvas.canvas.getBoundingClientRect();
+        self.mx = Math.floor(event.clientX - rect.left);
+        self.my = Math.floor(event.clientY - rect.top);
+    }, false);
     
     let col = this.level1.length;
     let row = this.level1[0].length;
@@ -187,7 +205,7 @@ GameManager.prototype.loadLevel = function(level) {
                         break;
                 }
                 case ',': {
-                        this.background[j][i] = new Wall(Sprites.wall_image2, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
+                        this.background[j][i] = new Light(Sprites.wall_image2, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
                         break;
                 }
                 case '_': {
