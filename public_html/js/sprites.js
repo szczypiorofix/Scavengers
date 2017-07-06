@@ -1,11 +1,11 @@
 var Sprites = {
     player_image: null,
+    ladder: null,
     wall_top: null,
     wall_left: null,
     wall_left_top: null,
     wall_left_bottom: null,
     wall_right: null,
-    ladder: null,
     wall_right_top: null,
     wall_right_bottom: null,
     wall_bottom: null,

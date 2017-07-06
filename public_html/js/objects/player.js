@@ -10,9 +10,6 @@ Player.prototype.constructor = Player;
 
 
 Player.prototype.update = function() {
-    
-    //if (this.speedY < this.gravity) this.speedY += this.weight;
-    
     this.x += this.speedX;
     this.y += this.speedY;    
 };

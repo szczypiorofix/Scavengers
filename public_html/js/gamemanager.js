@@ -7,11 +7,11 @@ function GameManager() {
         '.........................................................................',
         '.........................................................................',
         '.........................................................................',
-        '.........................................................................',
-        '.........................................................................',
-        '.........................................................................',
-        '.........................................................................',
-        '.........................................................................',
+        '.....................|...................................................',
+        '............_...,....|..,................................................',
+        '.....................|...................................................',
+        '.........700000000000000001..............................................',
+        '.........544444444444444443..............................................',
         '.........................................................................',
         '.........................................................................',
         '.........................................................................',
@@ -40,10 +40,8 @@ function GameManager() {
     this.fieldsToRight = 0;
     this.fieldsToTop = 0;
     this.fieldsToBottom = 0;
-    
-    
+     
     this.background = [];
-    
     
     this.camera = null;
     this.player = null;
@@ -108,16 +106,42 @@ GameManager.prototype.update = function() {
 GameManager.prototype.draw = function(ctx) {
     for (i = -this.fieldsToLeft; i < this.fieldsToRight; i++) {
         for (j = -this.fieldsToTop; j < this.fieldsToBottom; j++) {
-            
             if (this.player.getTileX(i) >= 0 && this.player.getTileX(i) <= this.background[0].length-1 && this.player.getTileY(j) >= 0 && this.player.getTileY(j) <= this.background.length-1)
             {
                 this.background[j + this.player.getTileY(0)][i + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
             }
             else {
-                if (i < 0) {
-                    //let x = i + this.fieldsToLeft + this.fieldsToRight;
-                    //this.background[j + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+
+                // PRAWY GORNY
+                if (this.player.getTileX(i) > this.background[0].length && this.player.getTileY(j) < 0) {
+                    this.background[j + this.fieldsToTop + this.fieldsToBottom + this.player.getTileY(0)][i - this.fieldsToLeft - this.fieldsToRight + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
                 }
+
+                // PRAWY DOLNY
+                if (this.player.getTileX(i) > this.background[0].length && this.player.getTileY(j) > this.background.length) {
+                    this.background[j - this.fieldsToTop - this.fieldsToBottom + this.player.getTileY(0)][i - this.fieldsToLeft - this.fieldsToRight + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+                }
+                // LEWY
+                if (this.player.getTileX(i) < 0) {
+                    this.background[j + this.player.getTileY(0)][i + this.fieldsToLeft + this.fieldsToRight + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+                    // LEWY DOLNY
+                    if (this.player.getTileX(i) < 0 && this.player.getTileY(j) > this.background.length) {
+                        this.background[j - this.fieldsToTop - this.fieldsToBottom + this.player.getTileY(0)][i + this.fieldsToLeft + this.fieldsToRight + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+                    }
+                    // LEWY GÓRNY
+                    if (this.player.getTileX(i) < 0 && this.player.getTileY(j) < 0) {
+                        this.background[this.fieldsToTop + this.fieldsToBottom + this.player.getTileY(0)][i + this.fieldsToLeft + this.fieldsToRight + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+                    }
+                } else
+                // GÓRA
+                if (this.player.getTileY(j) < 0) {
+                    this.background[j + this.fieldsToTop + this.fieldsToBottom + this.player.getTileY(0)][i + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+                }
+                // DÓŁ
+                if (this.player.getTileY(j) > this.background.length) {
+                    this.background[j - this.fieldsToTop - this.fieldsToBottom + this.player.getTileY(0)][i + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+                }
+                
             }
         }
     }
@@ -128,11 +152,11 @@ GameManager.prototype.draw = function(ctx) {
 GameManager.prototype.loadLevel = function(level) {
     this.level = level;
     Sprites.init();
-    
-    this.fieldsToLeft = Math.ceil((Canvas.width/2) / Canvas.scale)+1;
-    this.fieldsToRight = Math.ceil((Canvas.width/2) / Canvas.scale)+1;
-    this.fieldsToTop = Math.ceil((Canvas.height/2) / Canvas.scale)+1;
-    this.fieldsToBottom = Math.ceil((Canvas.height/2) / Canvas.scale)+1;
+
+    this.fieldsToLeft = (Canvas.tilesOnWidth / 2)+1;
+    this.fieldsToRight = (Canvas.tilesOnWidth / 2)+1;
+    this.fieldsToTop = (Canvas.tilesOnHeight / 2)+1;
+    this.fieldsToBottom = (Canvas.tilesOnHeight / 2)+1;
     
     console.log('Fields to top: '+this.fieldsToTop);
     console.log('Fields to bottom: '+this.fieldsToBottom);
@@ -141,13 +165,12 @@ GameManager.prototype.loadLevel = function(level) {
     
     this.camera = new Camera(0, 0);
     
-    this.player = new Player(Sprites.player_image, Canvas.scale * 20 , Canvas.scale * 10, Canvas.scale, Canvas.scale, 0.2);
+    this.player = new Player(Sprites.player_image, Canvas.scale * 15 , Canvas.scale * 8, Canvas.scale, Canvas.scale, 0.2);
     
     let col = this.level1.length;
     let row = this.level1[0].length;
     console.log('Map size: rows: '+row+", cols: "+col);
     console.log('Tiles on Y: '+Canvas.tilesOnHeight);
-    
     
     for (j = 0; j < col; j++) {
         this.background[j] = [];
@@ -160,7 +183,51 @@ GameManager.prototype.loadLevel = function(level) {
         for (i = 0; i < row; i++) {
             switch (this.level1[j][i]) {
                 case '.': {
-                        this.background[j][i] = new Wall(Sprites.wall_image1, i * Canvas.scale, j * Canvas.scale, Canvas.scale-1, Canvas.scale-1);
+                        this.background[j][i] = new Wall(Sprites.wall_image1, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
+                        break;
+                }
+                case ',': {
+                        this.background[j][i] = new Wall(Sprites.wall_image2, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
+                        break;
+                }
+                case '_': {
+                        this.background[j][i] = new Wall(Sprites.wall_image3, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
+                        break;
+                }
+                case '0': {
+                        this.background[j][i] = new Wall(Sprites.wall_top, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
+                        break;
+                }
+                case '1': {
+                        this.background[j][i] = new Wall(Sprites.wall_right_top, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
+                        break;
+                }
+                case '2': {
+                        this.background[j][i] = new Wall(Sprites.wall_right, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
+                        break;
+                }
+                case '3': {
+                        this.background[j][i] = new Wall(Sprites.wall_right_bottom, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
+                        break;
+                }
+                case '4': {
+                        this.background[j][i] = new Wall(Sprites.wall_bottom, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
+                        break;
+                }
+                case '5': {
+                        this.background[j][i] = new Wall(Sprites.wall_left_bottom, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
+                        break;
+                }
+                case '6': {
+                        this.background[j][i] = new Wall(Sprites.wall_left, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
+                        break;
+                }
+                case '7': {
+                        this.background[j][i] = new Wall(Sprites.wall_left_top, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
+                        break;
+                }
+                case '|': {
+                        this.background[j][i] = new Wall(Sprites.ladder, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
                         break;
                 }
                 default: {
