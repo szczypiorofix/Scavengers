@@ -150,13 +150,39 @@ GameManager.prototype.draw = function(ctx) {
         }
     }
     this.player.draw(ctx, -this.camera.x, -this.camera.y);
+    var rx = (this.player.x + this.player.width/2) - this.camera.x;
+    var ry = (this.player.y +this.player.height/2) - this.camera.y;
     
-    ctx.beginPath();
-    ctx.moveTo(this.mx * 1.1, this.my * 1.1);
-    //Canvas.ctx.moveTo(Canvas.width/2, Canvas.height/2);
-    ctx.lineTo((this.player.x + this.player.width/2) - this.camera.x, (this.player.y +this.player.height/2) - this.camera.y);
-    //ctx.rect(100, 100, this.player.x - this.camera.x, this.player.y-this.camera.y);
-    ctx.stroke();
+    var distance = Math.sqrt( ((this.player.x + this.player.width/2) - this.camera.x - this.mx)*((this.player.x + this.player.width/2) - this.camera.x - this.mx)
+            + (((this.player.y +this.player.height/2) - this.camera.y) - this.my) * (((this.player.y +this.player.height/2) - this.camera.y) - this.my));
+    
+    distance = Math.ceil(distance);
+    //console.log(distance);
+    //myradians = math.atan2(targetY-gunY, targetX-gunX)
+    var angle = (Math.atan2( ((this.player.y +this.player.height/2) - this.camera.y) - this.my, ((this.player.x +this.player.width/2) - this.camera.x) - this.mx) * 180 / Math.PI);
+    //console.log("angle: "+angle);
+    for (i = 0; i < distance; i++) {
+//        self.mx += (15 * Math.cos(self.mx * Math.PI / 180));
+//        self.my += (15 * Math.sin(self.my * Math.PI / 180));
+        //ctx.beginPath();
+        //ctx.moveTo(this.mx * 1.5, this.my * 1.5);
+        //ctx.lineTo((this.player.x + this.player.width/2) - this.camera.x, (this.player.y +this.player.height/2) - this.camera.y);
+        
+        //ctx.moveTo((this.player.x + this.player.width/2) - this.camera.x, (this.player.y +this.player.height/2) - this.camera.y);
+        //ctx.lineTo(50 * i, 50);
+        
+        rx -= (Math.cos(angle * Math.PI / 180));
+        ry -= (Math.sin(angle * Math.PI / 180));
+        //if (this.background[ktory] instanceof Light)
+        ctx.fillRect(rx, ry, 2, 2);
+        
+        //ctx.stroke();
+    }
+    
+//    ctx.beginPath();
+//    ctx.moveTo(this.mx * 1.1, this.my * 1.1);
+//    ctx.lineTo((this.player.x + this.player.width/2) - this.camera.x, (this.player.y +this.player.height/2) - this.camera.y);
+//    ctx.stroke();
 };
 
 
