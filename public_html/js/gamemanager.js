@@ -108,6 +108,7 @@ GameManager.prototype.update = function() {
 };
 
 GameManager.prototype.draw = function(ctx) {
+    var c = 0;
     for (i = -this.fieldsToLeft; i < this.fieldsToRight; i++) {
         for (j = -this.fieldsToTop; j < this.fieldsToBottom; j++) {
             if (this.player.getTileX(i) >= 0 && this.player.getTileX(i) <= this.background[0].length-1 && this.player.getTileY(j) >= 0 && this.player.getTileY(j) <= this.background.length-1)
@@ -115,69 +116,76 @@ GameManager.prototype.draw = function(ctx) {
                 this.background[j + this.player.getTileY(0)][i + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
             }
             else {
-//
-//                // PRAWY GORNY
-//                if (this.player.getTileX(i) > this.background[0].length && this.player.getTileY(j) < 0) {
-//                    this.background[j + this.fieldsToTop + this.fieldsToBottom + this.player.getTileY(0)][i - this.fieldsToLeft - this.fieldsToRight + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
-//                }
-//
-//                // PRAWY DOLNY
-//                if (this.player.getTileX(i) > this.background[0].length && this.player.getTileY(j) > this.background.length) {
-//                    this.background[j - this.fieldsToTop - this.fieldsToBottom + this.player.getTileY(0)][i - this.fieldsToLeft - this.fieldsToRight + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
-//                }
-//                // LEWY
-//                if (this.player.getTileX(i) < 0) {
-//                    this.background[j + this.player.getTileY(0)][i + this.fieldsToLeft + this.fieldsToRight + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
-//                    // LEWY DOLNY
-//                    if (this.player.getTileX(i) < 0 && this.player.getTileY(j) > this.background.length) {
-//                        this.background[j - this.fieldsToTop - this.fieldsToBottom + this.player.getTileY(0)][i + this.fieldsToLeft + this.fieldsToRight + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
-//                    }
-//                    // LEWY GÓRNY
-//                    if (this.player.getTileX(i) < 0 && this.player.getTileY(j) < 0) {
-//                        this.background[this.fieldsToTop + this.fieldsToBottom + this.player.getTileY(0)][i + this.fieldsToLeft + this.fieldsToRight + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
-//                    }
-//                } else
-//                // GÓRA
-//                if (this.player.getTileY(j) < 0) {
-//                    this.background[j + this.fieldsToTop + this.fieldsToBottom + this.player.getTileY(0)][i + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
-//                }
-//                // DÓŁ
-//                if (this.player.getTileY(j) > this.background.length) {
-//                    this.background[j - this.fieldsToTop - this.fieldsToBottom + this.player.getTileY(0)][i + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
-//                }
-//                
+                let x = i;
+                let y = j;
+                // LEWY
+                if (this.player.getTileX(i) < 0) {
+                    if (this.player.getTileY(j) < 0) {
+                        y = j + this.fieldsToTop + this.fieldsToBottom;
+                    }
+                    if (this.player.getTileY(j) >= 0) {
+                        x = i + this.fieldsToLeft + this.fieldsToRight;
+                        c++;
+                        this.background[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+                    }
+                }
+                // GORA
+                if (this.player.getTileY(j) < 0) {
+                    if (this.player.getTileX(i) < 0) {
+                        x = i + this.fieldsToLeft + this.fieldsToRight;
+                    }
+                    else {
+                        y = j + this.fieldsToTop + this.fieldsToBottom;
+                        c++;
+                        this.background[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+                    }
+                }
+                // LEWA GORA
+                if (this.player.getTileX(i) < 0 && this.player.getTileY(j) < 0) {
+                    x = i + this.fieldsToLeft + this.fieldsToRight;
+                    y = j + this.fieldsToTop + this.fieldsToBottom;
+                    c++;
+                    this.background[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+                }
+                // DÓŁ
+                if (this.player.getTileY(j) > this.background.length) {
+                    if (this.player.getTileX(i) < 0) {
+                        x = i + this.fieldsToLeft + this.fieldsToRight;
+                    }
+                    else {
+                        y = j - this.fieldsToTop - this.fieldsToBottom;
+                        c++;
+                        this.background[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+                    }
+                }
+                // LEWT DÓŁ
+                if (this.player.getTileX(i) < 0 && this.player.getTileY(j) < 0) {
+                    x = i + this.fieldsToLeft + this.fieldsToRight;
+                    y = j + this.fieldsToTop + this.fieldsToBottom;
+                    c++;
+                    this.background[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+                }
             }
         }
     }
+    //console.log(c);
     this.player.draw(ctx, -this.camera.x, -this.camera.y);
-    var rx = (this.player.x + this.player.width/2) - this.camera.x;
-    var ry = (this.player.y +this.player.height/2) - this.camera.y;
     
-    var distance = Math.sqrt( ((this.player.x + this.player.width/2) - this.camera.x - this.mx)*((this.player.x + this.player.width/2) - this.camera.x - this.mx)
-            + (((this.player.y +this.player.height/2) - this.camera.y) - this.my) * (((this.player.y +this.player.height/2) - this.camera.y) - this.my));
     
-    distance = Math.ceil(distance);
-    //console.log(distance);
-    //myradians = math.atan2(targetY-gunY, targetX-gunX)
-    var angle = (Math.atan2( ((this.player.y +this.player.height/2) - this.camera.y) - this.my, ((this.player.x +this.player.width/2) - this.camera.x) - this.mx) * 180 / Math.PI);
-    //console.log("angle: "+angle);
-    for (i = 0; i < distance; i++) {
-//        self.mx += (15 * Math.cos(self.mx * Math.PI / 180));
-//        self.my += (15 * Math.sin(self.my * Math.PI / 180));
-        //ctx.beginPath();
-        //ctx.moveTo(this.mx * 1.5, this.my * 1.5);
-        //ctx.lineTo((this.player.x + this.player.width/2) - this.camera.x, (this.player.y +this.player.height/2) - this.camera.y);
-        
-        //ctx.moveTo((this.player.x + this.player.width/2) - this.camera.x, (this.player.y +this.player.height/2) - this.camera.y);
-        //ctx.lineTo(50 * i, 50);
-        
-        rx -= (Math.cos(angle * Math.PI / 180));
-        ry -= (Math.sin(angle * Math.PI / 180));
-        //if (this.background[ktory] instanceof Light)
-        ctx.fillRect(rx, ry, 2, 2);
-        
-        //ctx.stroke();
-    }
+//    var rx = (this.player.x + this.player.width/2) - this.camera.x;
+//    var ry = (this.player.y +this.player.height/2) - this.camera.y;
+//    var distance = Math.sqrt( ((this.player.x + this.player.width/2) - this.camera.x - this.mx)*((this.player.x + this.player.width/2) - this.camera.x - this.mx)
+//            + (((this.player.y +this.player.height/2) - this.camera.y) - this.my) * (((this.player.y +this.player.height/2) - this.camera.y) - this.my));
+//    
+//    distance = Math.ceil(distance);
+//    var angle = (Math.atan2( ((this.player.y +this.player.height/2) - this.camera.y) - this.my, ((this.player.x +this.player.width/2) - this.camera.x) - this.mx) * 180 / Math.PI);
+//    //console.log("angle: "+angle);
+//    for (i = 0; i < distance; i++) {
+//        rx -= (Math.cos(angle * Math.PI / 180));
+//        ry -= (Math.sin(angle * Math.PI / 180));
+//        //if (this.background[ktory] instanceof Light)
+//        ctx.fillRect(rx, ry, 2, 2);
+//    }
     
 //    ctx.beginPath();
 //    ctx.moveTo(this.mx * 1.1, this.my * 1.1);

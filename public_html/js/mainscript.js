@@ -15,6 +15,7 @@
             this.width = this.canvas.width;
             this.height = this.canvas.height;
             this.scale = this.height / this.tilesOnHeight;
+            
             console.log('Canvas scale: ' +this.scale);
             //this.ctx.msImageSmoothingEnabled = false;
             //this.ctx.mozImageSmoothingEnabled = false;
