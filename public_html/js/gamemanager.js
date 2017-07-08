@@ -2,35 +2,28 @@ function GameManager() {
     
     this.levelWidth = 25;
     this.level1 = [
-        '.........................................................................',
-        '.........................................................................',
-        '.........................................................................',
-        '.........................................................................',
-        '.........................................................................',
-        '.....................|...................................................',
-        '............_...,....|...................................................',
-        '.....................|...................................................',
-        '.........700000000000000001..............................................',
-        '.........544444444444444443..............................................',
-        '.........................................................................',
-        '.........................................................................',
-        '.........................................................................',
-        '.........................................................................',
-        '.........................................................................',
-        '.........................................................................',
-        '.........................................................................',
-        '.........................................................................',
-        '.........................................................................',
-        '.........................................................................',
-        '.........................................................................',
-        '.........................................................................',
-        '.........................................................................',
-        '.........................................................................',
-        '.........................................................................',
-        '.........................................................................',
-        '.........................................................................',
-        '.........................................................................',
-        '.........................................................................'
+        '...................................................',
+        '...................................................',
+        '...................................................',
+        '...................................................',
+        '...................................................',
+        '.....................|.............................',
+        '............_...,....|.............................',
+        '.....................|.............................',
+        '.........700000000000000001........................',
+        '.........544444444444444443........................',
+        '...................................................',
+        '...................................................',
+        '...................................................',
+        '...................................................',
+        '...................................................',
+        '...................................................',
+        '...................................................',
+        '...................................................',
+        '...................................................',
+        '...................................................',
+        '...................................................',
+        '...................................................'
     ];
     
     this.input = null;
@@ -108,7 +101,6 @@ GameManager.prototype.update = function() {
 };
 
 GameManager.prototype.draw = function(ctx) {
-    var c = 0;
     for (i = -this.fieldsToLeft; i < this.fieldsToRight; i++) {
         for (j = -this.fieldsToTop; j < this.fieldsToBottom; j++) {
             if (this.player.getTileX(i) >= 0 && this.player.getTileX(i) <= this.background[0].length-1 && this.player.getTileY(j) >= 0 && this.player.getTileY(j) <= this.background.length-1)
@@ -123,9 +115,8 @@ GameManager.prototype.draw = function(ctx) {
                     if (this.player.getTileY(j) < 0) {
                         y = j + this.fieldsToTop + this.fieldsToBottom;
                     }
-                    if (this.player.getTileY(j) >= 0) {
+                    if (this.player.getTileY(j) >= 0 && this.player.getTileY(j) < this.background.length) {
                         x = i + this.fieldsToLeft + this.fieldsToRight;
-                        c++;
                         this.background[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
                     }
                 }
@@ -135,16 +126,16 @@ GameManager.prototype.draw = function(ctx) {
                         x = i + this.fieldsToLeft + this.fieldsToRight;
                     }
                     else {
-                        y = j + this.fieldsToTop + this.fieldsToBottom;
-                        c++;
-                        this.background[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+                        if (this.player.getTileX(i) < this.background[0].length) {
+                            y = j + this.fieldsToTop + this.fieldsToBottom;
+                            this.background[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+                        }
                     }
                 }
                 // LEWA GORA
                 if (this.player.getTileX(i) < 0 && this.player.getTileY(j) < 0) {
                     x = i + this.fieldsToLeft + this.fieldsToRight;
                     y = j + this.fieldsToTop + this.fieldsToBottom;
-                    c++;
                     this.background[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
                 }
                 // DÓŁ
@@ -153,16 +144,38 @@ GameManager.prototype.draw = function(ctx) {
                         x = i + this.fieldsToLeft + this.fieldsToRight;
                     }
                     else {
-                        y = j - this.fieldsToTop - this.fieldsToBottom;
-                        c++;
-                        this.background[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+                        if (this.player.getTileX(i) < this.background[0].length) {
+                            y = j - this.fieldsToTop - this.fieldsToBottom;
+                            this.background[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+                        }
                     }
                 }
                 // LEWT DÓŁ
-                if (this.player.getTileX(i) < 0 && this.player.getTileY(j) < 0) {
+                if (this.player.getTileX(i) < 0 && this.player.getTileY(j) > this.background.length) {
                     x = i + this.fieldsToLeft + this.fieldsToRight;
+                    y = j - this.fieldsToTop - this.fieldsToBottom;
+                    this.background[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+                }
+                // PRAWY
+                if (this.player.getTileX(i) > this.background[0].length) {
+                    if (this.player.getTileY(j) < 0) {
+                        y = j + this.fieldsToTop + this.fieldsToBottom;
+                    }
+                    if (this.player.getTileY(j) >= 0 && this.player.getTileY(j) < this.background.length) {
+                        x = i - this.fieldsToLeft - this.fieldsToRight;
+                        this.background[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+                    }
+                }
+                // PRAWY DÓŁ
+                if (this.player.getTileX(i) > this.background[0].length && this.player.getTileY(j) > this.background.length) {
+                    x = i - this.fieldsToLeft - this.fieldsToRight;
+                    y = j - this.fieldsToTop - this.fieldsToBottom;
+                    this.background[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+                }
+                // PRAWA GORA
+                if (this.player.getTileX(i) > this.background[0].length && this.player.getTileY(j) < 0) {
+                    x = i - this.fieldsToLeft - this.fieldsToRight;
                     y = j + this.fieldsToTop + this.fieldsToBottom;
-                    c++;
                     this.background[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
                 }
             }
