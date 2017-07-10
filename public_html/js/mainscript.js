@@ -8,6 +8,9 @@
         tilesOnHeight: 12,
         tilesOnWidth: 16,
         scale: 0,
+        fps: 0,
+        lastCalledTime: 0,
+        fpsCounter: 0,
 
         init: function() {
             this.canvas = document.getElementById('gamecanvas');
@@ -17,10 +20,25 @@
             this.scale = this.height / this.tilesOnHeight;
             
             console.log('Canvas scale: ' +this.scale);
-            //this.ctx.msImageSmoothingEnabled = false;
-            //this.ctx.mozImageSmoothingEnabled = false;
-            //this.ctx.webkitImageSmoothingEnabled = false;
+            this.ctx.msImageSmoothingEnabled = false;
+            this.ctx.mozImageSmoothingEnabled = false;
+            this.ctx.webkitImageSmoothingEnabled = false;
             this.ctx.imageSmoothingEnabled = false;
+        },
+        countFPS: function() {
+                if(!this.lastCalledTime) {
+                    this.lastCalledTime = Date.now();
+                    this.fps = 0;
+                    return;
+                }
+                delta = (Date.now() - this.lastCalledTime)/1000; 
+                this.lastCalledTime = Date.now();
+                if (this.fpsCounter >= 3) {
+                this.fps = (1/delta).toFixed(1); 
+                this.fpsCounter = 0;
+            }
+            this.fpsCounter++;
+            return this.fps;
         }
     };
     
@@ -33,10 +51,10 @@
     
     function game() {
         gameLoop();
-        requestAnimationFrame(game);
+        gameLoopController(game);
     }
 
-    var requestAnimationFrame =
+    var gameLoopController =
         window.requestAnimationFrame ||
         window.mozRequestAnimationFrame ||
         window.webkitRequestAnimationFrame ||
@@ -48,6 +66,6 @@
         gameManager = new GameManager();
         gameManager.init();
         gameManager.loadLevel(1);
-        requestAnimationFrame(game);
+        gameLoopController(game);
     }, false);
 

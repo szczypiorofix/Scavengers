@@ -12,6 +12,7 @@ var Sprites = {
     wall_image1: null,
     wall_image2: null,
     wall_image3: null,
+    scenery: null,
     
     newSprite: function(s, n) {
         s = new Image();
@@ -32,5 +33,6 @@ var Sprites = {
         this.wall_right_top = this.newSprite(this.wall_right_top, './images/wall_right_top.png');
         this.wall_right_bottom = this.newSprite(this.wall_right_bottom, './images/wall_right_bottom.png');
         this.ladder = this.newSprite(this.ladder, './images/ladder.png');
+        this.scenery = this.newSprite(this.scenery, './images/scenery.png');
     }
 };

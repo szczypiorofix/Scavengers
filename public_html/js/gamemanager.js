@@ -14,6 +14,8 @@ function GameManager() {
     this.mx = 0;
     this.my = 0;
     
+    this.scenery = null;
+    this.sx = 0; this.sy = 0;
     this.background = [];
     this.middleground = [];
     this.foreground = [];
@@ -104,6 +106,9 @@ GameManager.prototype.checkCollisions = function(o1, o2) {
 };
 
 GameManager.prototype.update = function() {
+    this.sx = -this.camera.x / 4;
+    this.sy = -this.camera.y / 4;
+    
     this.player.update();
     this.checkCollisions(this.player, this.middleground);
     this.camera.update(this.player, this);
@@ -196,13 +201,19 @@ GameManager.prototype.drawLayer = function(layer, ctx) {
 
 GameManager.prototype.draw = function(ctx) {
 
+    ctx.drawImage(this.scenery, this.sx, this.sy, Canvas.width*2, Canvas.height);
+    ctx.drawImage(this.scenery, this.sx + Canvas.width*2, this.sy, Canvas.width*2, Canvas.height);
+
     this.drawLayer(this.background, ctx);
     this.drawLayer(this.middleground, ctx);
+    this.drawLayer(this.foreground, ctx);
     
     this.player.draw(ctx, -this.camera.x, -this.camera.y);
 
     this.drawLayer(this.foreground, ctx);
-
+    ctx.font = "14px Arial";
+    ctx.fillStyle = "#ee5";
+    ctx.fillText("fps: "+Canvas.countFPS(), 10, 20);
     
 //    var rx = (this.player.x + this.player.width/2) - this.camera.x;
 //    var ry = (this.player.y +this.player.height/2) - this.camera.y;
@@ -233,6 +244,8 @@ GameManager.prototype.loadLevel = function(level) {
     this.currentLevel.load(level);
         
     this.camera = new Camera(0, 0);
+    
+    this.scenery = Sprites.scenery;
     
     var self = this;
     
