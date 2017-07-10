@@ -2,6 +2,7 @@
 function Player(image, x, y, width, height, weight) {
     this.speedX = 0;
     this.speedY = 0;
+    this.weight = weight;
     GameObject.call(this, image, x, y, width, height, weight);
 }
 
@@ -10,6 +11,10 @@ Player.prototype.constructor = Player;
 
 
 Player.prototype.update = function() {
+    
+    //this.speedY += this.weight;
+    //if (this.speedY > this.gravity) this.speedX = this.gravity; 
+    
     this.x += this.speedX;
     this.y += this.speedY;    
 };

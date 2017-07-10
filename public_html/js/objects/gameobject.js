@@ -18,6 +18,7 @@ GameObject.prototype.collision = function(ob1) {
     if (this.x < ob1.x + ob1.width &&
         this.x + this.width > ob1.x &&
         this.y < ob1.y + ob1.height &&
-        this.y + this.height > ob1.y)
+        this.y + this.height > ob1.y
+        )
     return true;
 };
