@@ -212,7 +212,7 @@ GameManager.prototype.draw = function(ctx) {
 
     this.drawLayer(this.foreground, ctx);
     ctx.font = "14px Arial";
-    ctx.fillStyle = "#ee5";
+    ctx.fillStyle = "#e41";
     ctx.fillText("fps: "+Canvas.countFPS(), 10, 20);
     
 //    var rx = (this.player.x + this.player.width/2) - this.camera.x;
@@ -288,12 +288,16 @@ GameManager.prototype.loadLevel = function(level) {
                         this.background[j][i] = new Wall(Sprites.wall_image1, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
                         break;
                 }
-                case ',': {
-                        this.background[j][i] = new Light(Sprites.wall_image2, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
+                case 'a': {
+                        this.background[j][i] = new Wall(Sprites.wall_image0, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
+                        break;
+                }
+                case 'b': {
+                        this.background[j][i] = new Wall(Sprites.wall_image2, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
                         break;
                 }
                 case '_': {
-                        this.background[j][i] = new Wall(Sprites.wall_image3, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
+                        this.background[j][i] = new Wall(Sprites.rock1, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
                         break;
                 }
                 case '0': {
@@ -328,6 +332,10 @@ GameManager.prototype.loadLevel = function(level) {
                         this.background[j][i] = new Wall(Sprites.wall_left_top, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
                         break;
                 }
+                case '8': {
+                        this.background[j][i] = new Wall(Sprites.wall_center, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
+                        break;
+                }
                 case '|': {
                         this.background[j][i] = new Wall(Sprites.ladder, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
                         break;
@@ -345,7 +353,7 @@ GameManager.prototype.loadLevel = function(level) {
         for (i = 0; i < row; i++) {
             switch (this.currentLevel.middleground[j][i]) {
                 case ',': {
-                        this.middleground[j][i] = new Light(Sprites.wall_image2, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
+                        this.middleground[j][i] = new Light(Sprites.candle1, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
                         break;
                 }
                 case 'P': {
@@ -382,7 +390,7 @@ GameManager.prototype.loadLevel = function(level) {
         for (i = 0; i < row; i++) {
             switch (this.currentLevel.foreground[j][i]) {
                 case '_': {
-                        this.foreground[j][i] = new Wall(Sprites.wall_image3, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
+                        this.foreground[j][i] = new Wall(Sprites.rock1, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
                         break;
                 }
                 default: {
