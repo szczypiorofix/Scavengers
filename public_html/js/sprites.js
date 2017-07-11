@@ -16,6 +16,7 @@ var Sprites = {
     candle1: null,
     rock1: null,
     scenery: null,
+    spritesheet1: null,
     
     newSprite: function(s, n) {
         s = new Image();
@@ -40,5 +41,8 @@ var Sprites = {
         this.wall_right_bottom = this.newSprite(this.wall_right_bottom, './images/wall_right_bottom.png');
         this.ladder = this.newSprite(this.ladder, './images/ladder.png');
         this.scenery = this.newSprite(this.scenery, './images/scenery.png');
+        this.spritesheet1 = new SpriteSheet({
+            width: 16 * Canvas.scale, height: 16 * Canvas.scale, filename: './images/spritesheet1.png'
+        });
     }
 };

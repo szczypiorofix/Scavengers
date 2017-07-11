@@ -47,10 +47,10 @@ GameManager.prototype.inputFromKeyboard = function() {
         this.player.speedX = 0;
     }
     if (!this.input.keyUp.isDown && !this.input.key_S.isDown) {
-        this.player.speedY = 0;
+        //this.player.speedY = 0;
     }
     if (!this.input.keyDown.isDown && !this.input.key_W.isDown) {
-        this.player.speedY = 0;
+        //this.player.speedY = 0;
     }
 
     if ((this.input.keyRight.isDown || this.input.key_D.isDown) && this.player.getTileX(0) < this.currentLevel.width-1) {
@@ -60,10 +60,10 @@ GameManager.prototype.inputFromKeyboard = function() {
         this.player.speedX = -this.playerSpeed;
     }
     if ((this.input.keyDown.isDown || this.input.key_S.isDown) && this.player.getTileY(0) < this.currentLevel.height-1) {
-        this.player.speedY = this.playerSpeed;
+        //this.player.speedY = this.playerSpeed;
     }
     if ((this.input.keyUp.isDown || this.input.key_W.isDown) && this.player.getTileY(0) > 0) {
-        this.player.speedY = -this.playerSpeed;
+        //this.player.speedY = -this.playerSpeed;
     }
 };
 
@@ -87,20 +87,18 @@ GameManager.prototype.checkCollisions = function(o1, o2) {
         for (i = 0; i < o2.length; i++) {
             if (o1.collision(o2[i][j])) {
                 
-//                if (o1.y + o1.height > o2[i][j].y) {
-//                    o1.y = o2[i][j].y - o2[i][j].height;
-//                }
-//                if (o1.y < o2[i][j].y) {
-//                    o1.y -= this.playerSpeed;
-//                }
-                
-//                if (o1.x < o2[i][j].x) {
-//                    o1.x -= this.playerSpeed;
-//                }
-//                if (o1.x + o1.width > o2[i][j].x) {
-//                    o1.x += this.playerSpeed;
-//                }
+                if (o1.y + o1.height > o2[i][j].y) {
+                    o1.y = o2[i][j].y - o2[i][j].height+5;
+                    o1.speedY = 0;
+                    o1.onGround = true;
+                }
+                if (o1.y < o2[i][j].y) {
+                    o1.y -= this.playerSpeed;
+                }
             }
+            else {
+                    o1.onGround = false;
+                }
         }
     }
 };
@@ -209,6 +207,8 @@ GameManager.prototype.draw = function(ctx) {
     this.drawLayer(this.foreground, ctx);
     
     this.player.draw(ctx, -this.camera.x, -this.camera.y);
+
+    Sprites.spritesheet1.drawSprite(ctx, {x: 50, y: 50, row: 0, col: 0});
 
     this.drawLayer(this.foreground, ctx);
     ctx.font = "14px Arial";
