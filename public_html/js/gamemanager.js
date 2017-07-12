@@ -62,8 +62,11 @@ GameManager.prototype.inputFromKeyboard = function() {
     if ((this.input.keyDown.isDown || this.input.key_S.isDown) && this.player.getTileY(0) < this.currentLevel.height-1) {
         //this.player.speedY = this.playerSpeed;
     }
-    if ((this.input.keyUp.isDown || this.input.key_W.isDown) && this.player.getTileY(0) > 0) {
+    if ((this.input.keyUp.isDown || this.input.key_W.isDown) && this.player.getTileY(0) > 0 && !this.player.onGround && !this.player.isJumping) {
         //this.player.speedY = -this.playerSpeed;
+        this.player.speedY = -(this.playerSpeed + 3);
+        this.player.onGround = false;
+        this.player.isJumping = true;
     }
 };
 
@@ -91,9 +94,7 @@ GameManager.prototype.checkCollisions = function(o1, o2) {
                     o1.y = o2[i][j].y - o2[i][j].height+5;
                     o1.speedY = 0;
                     o1.onGround = true;
-                }
-                if (o1.y < o2[i][j].y) {
-                    o1.y -= this.playerSpeed;
+                    o1.isJumping = false;
                 }
             }
             else {
@@ -107,9 +108,14 @@ GameManager.prototype.update = function() {
     this.sx = -this.camera.x / 4;
     this.sy = -this.camera.y / 4;
     
+    if (this.player.onGround) this.player.speedY = 0;
+    else this.player.isJumping = true;
+    
     this.player.update();
     this.checkCollisions(this.player, this.middleground);
     this.camera.update(this.player, this);
+    
+    //console.log(this.player.isJumping);
 };
 
 GameManager.prototype.drawLayer = function(layer, ctx) {

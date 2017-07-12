@@ -4,6 +4,7 @@ function Player(image, x, y, width, height, weight) {
     this.speedY = 0;
     this.weight = weight;
     this.onGround = false;
+    this.isJumping = false;
     GameObject.call(this, image, x, y, width, height, weight);
 }
 
