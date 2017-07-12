@@ -61,12 +61,23 @@ GameManager.prototype.inputFromKeyboard = function() {
     }
     if ((this.input.keyDown.isDown || this.input.key_S.isDown) && this.player.getTileY(0) < this.currentLevel.height-1) {
         //this.player.speedY = this.playerSpeed;
+        if (this.player.onLadder) {
+            this.player.speedY = this.playerSpeed;
+        }
     }
-    if ((this.input.keyUp.isDown || this.input.key_W.isDown) && this.player.getTileY(0) > 0 && !this.player.onGround && !this.player.isJumping) {
-        //this.player.speedY = -this.playerSpeed;
-        this.player.speedY = -(this.playerSpeed + 3);
-        this.player.onGround = false;
-        this.player.isJumping = true;
+    if ((this.input.keyUp.isDown || this.input.key_W.isDown) && this.player.getTileY(0) > 0) {
+        if (this.player.onGround && !this.player.isJumping && !this.player.onLadder) {
+                this.player.speedY = -this.playerSpeed;
+                this.player.onGround = false;
+                this.player.isJumping = true;
+        }
+        else {
+            if (this.player.onLadder) {
+                this.player.y -= 6;
+                this.player.onGround = false;
+                this.player.isJumping = false;
+            }
+        }
     }
 };
 
@@ -89,22 +100,30 @@ GameManager.prototype.checkCollisions = function(o1, o2) {
     for (j = 0; j < o2[0].length; j++) {
         for (i = 0; i < o2.length; i++) {
             if (o1.collision(o2[i][j])) {
-                
-                if (o1.y + o1.height > o2[i][j].y) {
-                    o1.y = o2[i][j].y - o2[i][j].height+5;
+                if (o2[i][j] instanceof Ladder) {
+                    o1.onLadder = true;
                     o1.speedY = 0;
                     o1.onGround = true;
                     o1.isJumping = false;
                 }
-            }
-            else {
-                    o1.onGround = false;
+                else {
+                    if (o1.y + o1.height > o2[i][j].y) {
+                        o1.y = o2[i][j].y - o2[i][j].height+5;
+                        o1.speedY = 0;
+                        o1.onGround = true;
+                        o1.isJumping = false;
+                    }
                 }
+            }
         }
     }
 };
 
 GameManager.prototype.update = function() {
+    
+    this.player.onLadder = false;
+    this.player.onGround = false;
+    
     this.sx = -this.camera.x / 4;
     this.sy = -this.camera.y / 4;
     
@@ -115,7 +134,11 @@ GameManager.prototype.update = function() {
     this.checkCollisions(this.player, this.middleground);
     this.camera.update(this.player, this);
     
-    //console.log(this.player.isJumping);
+    if (!this.player.onGround) {
+        this.player.speedY += this.player.weight;
+    }
+    
+    //console.log(this.player.speedY);
 };
 
 GameManager.prototype.drawLayer = function(layer, ctx) {
@@ -214,8 +237,6 @@ GameManager.prototype.draw = function(ctx) {
     
     this.player.draw(ctx, -this.camera.x, -this.camera.y);
 
-    Sprites.spritesheet1.drawSprite(ctx, {x: 50, y: 50, row: 0, col: 0});
-
     this.drawLayer(this.foreground, ctx);
     ctx.font = "14px Arial";
     ctx.fillStyle = "#e41";
@@ -291,59 +312,15 @@ GameManager.prototype.loadLevel = function(level) {
         for (i = 0; i < row; i++) {
             switch (this.currentLevel.background[j][i]) {
                 case '.': {
-                        this.background[j][i] = new Wall(Sprites.wall_image1, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
+                        this.background[j][i] = new Wall(Sprites.wallSheet, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale, 2, 0);
                         break;
                 }
                 case 'a': {
-                        this.background[j][i] = new Wall(Sprites.wall_image0, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
+                        this.background[j][i] = new Wall(Sprites.wallSheet, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale, 0, 0);
                         break;
                 }
                 case 'b': {
-                        this.background[j][i] = new Wall(Sprites.wall_image2, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
-                        break;
-                }
-                case '_': {
-                        this.background[j][i] = new Wall(Sprites.rock1, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
-                        break;
-                }
-                case '0': {
-                        this.background[j][i] = new Wall(Sprites.wall_top, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
-                        break;
-                }
-                case '1': {
-                        this.background[j][i] = new Wall(Sprites.wall_right_top, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
-                        break;
-                }
-                case '2': {
-                        this.background[j][i] = new Wall(Sprites.wall_right, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
-                        break;
-                }
-                case '3': {
-                        this.background[j][i] = new Wall(Sprites.wall_right_bottom, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
-                        break;
-                }
-                case '4': {
-                        this.background[j][i] = new Wall(Sprites.wall_bottom, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
-                        break;
-                }
-                case '5': {
-                        this.background[j][i] = new Wall(Sprites.wall_left_bottom, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
-                        break;
-                }
-                case '6': {
-                        this.background[j][i] = new Wall(Sprites.wall_left, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
-                        break;
-                }
-                case '7': {
-                        this.background[j][i] = new Wall(Sprites.wall_left_top, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
-                        break;
-                }
-                case '8': {
-                        this.background[j][i] = new Wall(Sprites.wall_center, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
-                        break;
-                }
-                case '|': {
-                        this.background[j][i] = new Wall(Sprites.ladder, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
+                        this.background[j][i] = new Wall(Sprites.wallSheet, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale, 1, 0);
                         break;
                 }
                 default: {
@@ -359,7 +336,7 @@ GameManager.prototype.loadLevel = function(level) {
         for (i = 0; i < row; i++) {
             switch (this.currentLevel.middleground[j][i]) {
                 case ',': {
-                        this.middleground[j][i] = new Light(Sprites.candle1, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
+                        this.middleground[j][i] = new Light(Sprites.wallSheet, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale, 1, 1);
                         break;
                 }
                 case 'P': {
@@ -368,21 +345,46 @@ GameManager.prototype.loadLevel = function(level) {
                         break;
                 }
                 case 'L': {
-                        this.middleground[j][i] = new Wall(Sprites.ladder, Canvas.scale * i , Canvas.scale * j, Canvas.scale, Canvas.scale);
+                        this.middleground[j][i] = new Ladder(Sprites.wallSheet, Canvas.scale * i , Canvas.scale * j, Canvas.scale, Canvas.scale, 0, 1);
                         break;
                 }
                 case '0': {
-                        this.middleground[j][i] = new Ground(Sprites.wall_left_top, Canvas.scale * i , Canvas.scale * j, Canvas.scale, Canvas.scale);
+                        this.middleground[j][i] = new Ground(Sprites.groundSheet, Canvas.scale * i , Canvas.scale * j, Canvas.scale, Canvas.scale, 0, 0);
                         break;
                 }
                 case '1': {
-                        this.middleground[j][i] = new Ground(Sprites.wall_top, Canvas.scale * i , Canvas.scale * j, Canvas.scale, Canvas.scale);
+                        this.middleground[j][i] = new Ground(Sprites.groundSheet, Canvas.scale * i , Canvas.scale * j, Canvas.scale, Canvas.scale, 1, 0);
                         break;
                 }
                 case '2': {
-                        this.middleground[j][i] = new Ground(Sprites.wall_right_top, Canvas.scale * i , Canvas.scale * j, Canvas.scale, Canvas.scale);
+                        this.middleground[j][i] = new Ground(Sprites.groundSheet, Canvas.scale * i , Canvas.scale * j, Canvas.scale, Canvas.scale, 2, 0);
                         break;
                 }
+                case '3': {
+                        this.middleground[j][i] = new Ground(Sprites.groundSheet, Canvas.scale * i , Canvas.scale * j, Canvas.scale, Canvas.scale, 2, 1);
+                        break;
+                }
+                case '4': {
+                        this.middleground[j][i] = new Ground(Sprites.groundSheet, Canvas.scale * i , Canvas.scale * j, Canvas.scale, Canvas.scale, 2, 2);
+                        break;
+                }
+                case '5': {
+                        this.middleground[j][i] = new Ground(Sprites.groundSheet, Canvas.scale * i , Canvas.scale * j, Canvas.scale, Canvas.scale, 1, 2);
+                        break;
+                }
+                case '6': {
+                        this.middleground[j][i] = new Ground(Sprites.groundSheet, Canvas.scale * i , Canvas.scale * j, Canvas.scale, Canvas.scale, 0, 2);
+                        break;
+                }
+                case '7': {
+                        this.middleground[j][i] = new Ground(Sprites.groundSheet, Canvas.scale * i , Canvas.scale * j, Canvas.scale, Canvas.scale, 0, 1);
+                        break;
+                }
+                case '8': {
+                        this.middleground[j][i] = new Ground(Sprites.groundSheet, Canvas.scale * i , Canvas.scale * j, Canvas.scale, Canvas.scale, 1, 1);
+                        break;
+                }
+
                 default: {
                         this.middleground[j][i] = new EmptyObject();
                         break;
@@ -396,7 +398,7 @@ GameManager.prototype.loadLevel = function(level) {
         for (i = 0; i < row; i++) {
             switch (this.currentLevel.foreground[j][i]) {
                 case '_': {
-                        this.foreground[j][i] = new Wall(Sprites.rock1, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale);
+                        this.foreground[j][i] = new Wall(Sprites.wallSheet, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale, 0, 1);
                         break;
                 }
                 default: {

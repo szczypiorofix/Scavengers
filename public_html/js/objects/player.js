@@ -5,6 +5,7 @@ function Player(image, x, y, width, height, weight) {
     this.weight = weight;
     this.onGround = false;
     this.isJumping = false;
+    this.onLadder = false;
     GameObject.call(this, image, x, y, width, height, weight);
 }
 
@@ -13,8 +14,7 @@ Player.prototype.constructor = Player;
 
 
 Player.prototype.update = function() {
-    
-    if (!this.onGround) this.speedY += this.weight;
+
     if (this.speedY > this.gravity) this.speedY = this.gravity; 
     
     this.x += this.speedX;
