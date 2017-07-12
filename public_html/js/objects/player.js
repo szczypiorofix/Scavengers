@@ -21,6 +21,14 @@ Player.prototype.update = function() {
     this.y += this.speedY;    
 };
 
+Player.prototype.getCenterX = function() {
+    return (this.x + (this.width/2));
+};
+
+Player.prototype.getCenterY = function() {
+    return (this.y + (this.height/2));
+};
+
 Player.prototype.getTileX = function(offset) {
     return Math.floor(((this.x + (this.width/2)) / Canvas.scale)) +offset;
 };

@@ -100,20 +100,23 @@ GameManager.prototype.checkCollisions = function(o1, o2) {
     for (j = 0; j < o2[0].length; j++) {
         for (i = 0; i < o2.length; i++) {
             if (o1.collision(o2[i][j])) {
-                if (o2[i][j] instanceof Ladder) {
-                    o1.onLadder = true;
-                    o1.speedY = 0;
-                    o1.onGround = true;
-                    o1.isJumping = false;
-                }
-                else {
-                    if (o1.y + o1.height > o2[i][j].y) {
-                        o1.y = o2[i][j].y - o2[i][j].height+5;
+//                if (o2[i][j] instanceof Ladder) {
+//                    o1.onLadder = true;
+//                    o1.speedY = 0;
+//                    o1.onGround = true;
+//                    o1.isJumping = false;
+//                }
+//                else {
+                    if (o1.y > o2[i][j].y - o2[i][j].height) {
                         o1.speedY = 0;
+                        o1.y = o2[i][j].y - o2[i][j].height;
                         o1.onGround = true;
                         o1.isJumping = false;
                     }
-                }
+                    if (o1.x + o1.width > o2[i][j].x + 5) {
+                        //console.log('RIGHT');
+                    }
+                //}
             }
         }
     }
