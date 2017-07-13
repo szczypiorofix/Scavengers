@@ -342,6 +342,10 @@ GameManager.prototype.loadLevel = function(level) {
                         this.middleground[j][i] = new Light(Sprites.wallSheet, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale, 1, 1);
                         break;
                 }
+                case 'r': {
+                        this.middleground[j][i] = new ResWood(Sprites.resourcesSheet, i * Canvas.scale, j * Canvas.scale, Canvas.scale, Canvas.scale, 0, 0);
+                        break;
+                }
                 case 'P': {
                         this.middleground[j][i] = new EmptyObject();
                         this.player = new Player(Sprites.player_image, Canvas.scale * i , Canvas.scale * j, Canvas.scale, Canvas.scale, 0.2);

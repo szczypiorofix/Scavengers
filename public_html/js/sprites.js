@@ -3,6 +3,7 @@ var Sprites = {
     scenery: null,
     groundSheet: null,
     wallSheet: null,
+    resourcesSheet: null,
     
     newSprite: function(s, n) {
         s = new Image();
@@ -18,6 +19,9 @@ var Sprites = {
         });
         this.wallSheet = new SpriteSheet({
             width: 16, height: 16, rows: 3, cols: 3, filename: './images/wallsheet.png'
+        });
+        this.resourcesSheet = new SpriteSheet({
+            width: 16, height: 16, rows: 3, cols: 3, filename: './images/resourcessheet.png'
         });
     },
     drawSprite: function(ctx, spr, params) {

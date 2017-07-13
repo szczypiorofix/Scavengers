@@ -1,17 +1,17 @@
-function Ladder(spritesheet, x, y, width, height, r, c) {
+function ResWood(spritesheet, x, y, width, height, r, c) {
     this.spritesheet = spritesheet;
     this.row = r;
     this.col = c;
     GameObject.call(this, spritesheet, x, y, width, height);
 }
 
-Ladder.prototype = Object.create(GameObject.prototype);
-Ladder.prototype.constructor = Ladder;
+ResWood.prototype = Object.create(GameObject.prototype);
+ResWood.prototype.constructor = ResWood;
 
 
-Ladder.prototype.update = function(){
+ResWood.prototype.update = function(){
 };
 
-Ladder.prototype.draw = function(ctx, offsetX, offsetY){
+ResWood.prototype.draw = function(ctx, offsetX, offsetY){
     Sprites.drawSprite(ctx, this.spritesheet, {x: this.x + offsetX, y: this.y + offsetY, row: this.row, col: this.col});
 };
