@@ -145,86 +145,85 @@ GameManager.prototype.update = function() {
 };
 
 GameManager.prototype.drawLayer = function(layer, ctx) {
-        for (i = -this.fieldsToLeft; i < this.fieldsToRight; i++) {
+    for (i = -this.fieldsToLeft; i < this.fieldsToRight; i++) {
         for (j = -this.fieldsToTop; j < this.fieldsToBottom; j++) {
             if (!(layer[j + this.player.getTileY(0), i + this.player.getTileX(0)] instanceof EmptyObject)) {
-            if (this.player.getTileX(i) >= 0 && this.player.getTileX(i) <= layer[0].length-1 && this.player.getTileY(j) >= 0 && this.player.getTileY(j) <= this.currentLevel.height-1)
-            {
-                layer[j + this.player.getTileY(0)][i + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
-            }
-            else {
-                let x = i;
-                let y = j;
-                // LEWY
-                if (this.player.getTileX(i) < 0) {
-                    if (this.player.getTileY(j) < 0) {
-                        y = j + this.fieldsToTop + this.fieldsToBottom;
-                    }
-                    if (this.player.getTileY(j) >= 0 && this.player.getTileY(j) < layer.length) {
-                        x = i + this.fieldsToLeft + this.fieldsToRight;
-                        layer[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
-                    }
+                if (this.player.getTileX(i) >= 0 && this.player.getTileX(i) <= layer[0].length-1 && this.player.getTileY(j) >= 0 && this.player.getTileY(j) <= this.currentLevel.height-1) {
+                    layer[j + this.player.getTileY(0)][i + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
                 }
-                // GORA
-                if (this.player.getTileY(j) < 0) {
+                else {
+                    let x = i;
+                    let y = j;
+                    // LEWY
                     if (this.player.getTileX(i) < 0) {
-                        x = i + this.fieldsToLeft + this.fieldsToRight;
-                    }
-                    else {
-                        if (this.player.getTileX(i) < layer[0].length) {
+                        if (this.player.getTileY(j) < 0) {
                             y = j + this.fieldsToTop + this.fieldsToBottom;
+                        }
+                        if (this.player.getTileY(j) >= 0 && this.player.getTileY(j) < layer.length) {
+                            x = i + this.fieldsToLeft + this.fieldsToRight;
                             layer[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
                         }
                     }
-                }
-                // LEWA GORA
-                if (this.player.getTileX(i) < 0 && this.player.getTileY(j) < 0) {
-                    x = i + this.fieldsToLeft + this.fieldsToRight;
-                    y = j + this.fieldsToTop + this.fieldsToBottom;
-                    layer[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
-                }
-                // DÓŁ
-                if (this.player.getTileY(j) > layer.length) {
-                    if (this.player.getTileX(i) < 0) {
-                        x = i + this.fieldsToLeft + this.fieldsToRight;
-                    }
-                    else {
-                        if (this.player.getTileX(i) < layer[0].length) {
-                            y = j - this.fieldsToTop - this.fieldsToBottom;
-                            layer[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
-                        }
-                    }
-                }
-                // LEWT DÓŁ
-                if (this.player.getTileX(i) < 0 && this.player.getTileY(j) > layer.length) {
-                    x = i + this.fieldsToLeft + this.fieldsToRight;
-                    y = j - this.fieldsToTop - this.fieldsToBottom;
-                    layer[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
-                }
-                // PRAWY
-                if (this.player.getTileX(i) > layer[0].length) {
+                    // GORA
                     if (this.player.getTileY(j) < 0) {
-                        y = j + this.fieldsToTop + this.fieldsToBottom;
+                        if (this.player.getTileX(i) < 0) {
+                            x = i + this.fieldsToLeft + this.fieldsToRight;
+                        }
+                        else {
+                            if (this.player.getTileX(i) < layer[0].length) {
+                                y = j + this.fieldsToTop + this.fieldsToBottom;
+                                layer[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+                            }
+                        }
                     }
-                    if (this.player.getTileY(j) >= 0 && this.player.getTileY(j) < layer.length) {
+                    // LEWA GORA
+                    if (this.player.getTileX(i) < 0 && this.player.getTileY(j) < 0) {
+                        x = i + this.fieldsToLeft + this.fieldsToRight;
+                        y = j + this.fieldsToTop + this.fieldsToBottom;
+                        layer[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+                    }
+                    // DÓŁ
+                    if (this.player.getTileY(j) > layer.length) {
+                        if (this.player.getTileX(i) < 0) {
+                            x = i + this.fieldsToLeft + this.fieldsToRight;
+                        }
+                        else {
+                            if (this.player.getTileX(i) < layer[0].length) {
+                                y = j - this.fieldsToTop - this.fieldsToBottom;
+                                layer[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+                            }
+                        }
+                    }
+                    // LEWT DÓŁ
+                    if (this.player.getTileX(i) < 0 && this.player.getTileY(j) > layer.length) {
+                        x = i + this.fieldsToLeft + this.fieldsToRight;
+                        y = j - this.fieldsToTop - this.fieldsToBottom;
+                        layer[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+                    }
+                    // PRAWY
+                    if (this.player.getTileX(i) > layer[0].length) {
+                        if (this.player.getTileY(j) < 0) {
+                            y = j + this.fieldsToTop + this.fieldsToBottom;
+                        }
+                        if (this.player.getTileY(j) >= 0 && this.player.getTileY(j) < layer.length) {
+                            x = i - this.fieldsToLeft - this.fieldsToRight;
+                            layer[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+                        }
+                    }
+                    // PRAWY DÓŁ
+                    if (this.player.getTileX(i) > layer[0].length && this.player.getTileY(j) > layer.length) {
                         x = i - this.fieldsToLeft - this.fieldsToRight;
+                        y = j - this.fieldsToTop - this.fieldsToBottom;
+                        layer[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
+                    }
+                    // PRAWA GORA
+                    if (this.player.getTileX(i) > layer[0].length && this.player.getTileY(j) < 0) {
+                        x = i - this.fieldsToLeft - this.fieldsToRight;
+                        y = j + this.fieldsToTop + this.fieldsToBottom;
                         layer[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
                     }
                 }
-                // PRAWY DÓŁ
-                if (this.player.getTileX(i) > layer[0].length && this.player.getTileY(j) > layer.length) {
-                    x = i - this.fieldsToLeft - this.fieldsToRight;
-                    y = j - this.fieldsToTop - this.fieldsToBottom;
-                    layer[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
-                }
-                // PRAWA GORA
-                if (this.player.getTileX(i) > layer[0].length && this.player.getTileY(j) < 0) {
-                    x = i - this.fieldsToLeft - this.fieldsToRight;
-                    y = j + this.fieldsToTop + this.fieldsToBottom;
-                    layer[y + this.player.getTileY(0)][x + this.player.getTileX(0)].draw(ctx, -this.camera.x, -this.camera.y);
-                }
             }
-        }
         }
     }
 };
