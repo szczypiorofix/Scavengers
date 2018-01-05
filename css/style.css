@@ -16,7 +16,7 @@ body .gamecanvasdiv {
 html .gamecanvasdiv #gamecanvas,
 body .gamecanvasdiv #gamecanvas {
   margin: 0 auto;
-  background-color: #000000;
+  background-color: #111111;
   width: 100%;
   height: 100%;
 }
