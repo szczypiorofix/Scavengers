@@ -1,0 +1,18 @@
+{
+	"folders": [
+		{
+			"path": "."
+		}
+	],
+	"settings": {
+		"less.compile": {
+			"out": "${workspaceRoot}\\css\\"
+		},
+		"editor.fontFamily": "Noto Mono, monospace",
+		"editor.lineHeight": 16,
+		"editor.fontLigatures": true,
+		"editor.mouseWheelZoom": true,
+		"editor.cursorWidth": 8,
+		"editor.cursorBlinking": "phase",
+	}
+}
