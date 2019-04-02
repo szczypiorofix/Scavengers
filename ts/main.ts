@@ -2,10 +2,10 @@ interface KeyProps {
     code: number,
     isDown: Boolean,
     isUp: Boolean,
-    press: VoidFunction,
-    release: ()=> void,
-    downHandler: (event: KeyboardEvent) => void,
-    upHandler: (event: KeyboardEvent) => void
+    press?: ()=> void,
+    release?: ()=> void,
+    downHandler?: (event: KeyboardEvent) => void,
+    upHandler?: (event: KeyboardEvent) => void
 }
 
 class Input {
@@ -19,17 +19,17 @@ class Input {
     keyA:KeyProps;
 
     constructor() {
-        this.keyLeft = this.keyboard(37);  // LEFT ARROW
-        this.keyRight = this.keyboard(39); // RIGHT ARROW
-        this.keyUp = this.keyboard(38);    // UP ARROW
-        this.keyDown = this.keyboard(40);  // DOWN ARROW
-        this.keyW = this.keyboard(87);     // W KEY
-        this.keyS = this.keyboard(83);     // S KEY
-        this.keyD = this.keyboard(68);     // D KEY
-        this.keyA = this.keyboard(65);     // A KEY
+        this.keyLeft  = this.prepareKey(37); // LEFT ARROW
+        this.keyRight = this.prepareKey(39); // RIGHT ARROW
+        this.keyUp    = this.prepareKey(38); // UP ARROW
+        this.keyDown  = this.prepareKey(40); // DOWN ARROW
+        this.keyW     = this.prepareKey(87); // W KEY
+        this.keyS     = this.prepareKey(83); // S KEY
+        this.keyD     = this.prepareKey(68); // D KEY
+        this.keyA     = this.prepareKey(65); // A KEY
     }
 
-    private keyboard(keyCode:number):KeyProps {
+    private prepareKey(keyCode:number):KeyProps {
         let key:KeyProps = {
             code: keyCode,
             isDown: false,
