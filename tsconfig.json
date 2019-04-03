@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+        "module": "amd",
+        "lib": ["es2018", "dom"],
+        "sourceMap": true,
+        "pretty": true,
+        "charset": "utf8",
+        "outDir": ".\\js\\",
+        "rootDir": ".\\ts\\",
+        "outFile": ".\\js\\main.js"
+    },
+    "exclude": [
+        "node_modules",
+        "**/*.spec.ts"
+    ]
+}

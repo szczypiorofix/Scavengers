@@ -5,7 +5,7 @@
     "tasks": [
         {
             "type": "typescript",
-            "tsconfig": "ts\\tsconfig.json",
+            "tsconfig": "tsconfig.json",
             "problemMatcher": [
                 "$tsc"
             ],

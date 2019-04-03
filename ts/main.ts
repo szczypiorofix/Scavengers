@@ -1,3 +1,7 @@
+
+/**
+ * Key Properties interface
+ */
 interface KeyProps {
     code: number,
     isDown: Boolean,
@@ -8,6 +12,9 @@ interface KeyProps {
     upHandler?: (event: KeyboardEvent) => void
 }
 
+/**
+ * Input manager class
+ */
 class Input {
     keyLeft:KeyProps;
     keyRight:KeyProps;
@@ -44,7 +51,7 @@ class Input {
                     key.isDown = true;
                     key.isUp = false;
                 }
-                event.preventDefault();
+                // event.preventDefault();
             },
             upHandler: function(event) {
                 if (event.keyCode === key.code) {
@@ -52,7 +59,7 @@ class Input {
                     key.isDown = false;
                     key.isUp = true;
                 }
-                event.preventDefault();
+                // event.preventDefault();
             }
         }
         window.addEventListener("keydown", key.downHandler.bind(key), false);
@@ -60,8 +67,6 @@ class Input {
         return key;
       }
 }
-
-
 
 /**
  * Canvas main class
@@ -79,13 +84,10 @@ class Canvas {
     delta:number;
     lastCalledTime:number;
     fpsCounter:number;
-
-    px:number;
-    py:number;
-    pSpeed:number;
-    image:CanvasImageSource;
+    mTimer:number;
 
     keyInput:Input;
+    playerSpriteSheet:SpriteSheet;
 
     
     /**
@@ -105,16 +107,16 @@ class Canvas {
         this.ctx.font = "14px Arial";
         this.ctx.fillStyle = "#e41";
 
-        this.image = new Image();
-        this.image.src  = "images/player.png";
-
         console.log("Canvas prepared. Width: "+this.width+", height: "+this.height+". Scale: "+this.scale);
         
-        this.px = 100;
-        this.py = 150;
-        this.pSpeed = 5;
-
+        this.fps = 0;
+        this.fpsCounter = 0;
+        this.mTimer = 0;
+        
         this.keyInput = new Input();
+
+
+        this.playerSpriteSheet = new SpriteSheet("./res/images/characters.png", 16, 16);
 
         this.gameLoop();
     }
@@ -124,7 +126,7 @@ class Canvas {
     private render() {
 
 
-        this.ctx.drawImage(this.image, this.px, this.py, 64, 64);
+        // this.ctx.drawImage(this.image, this.px, this.py, 64, 64);
 
         // this.ctx.fillStyle = "#FF0000";
         // this.ctx.font = "30px Arial";
@@ -132,50 +134,38 @@ class Canvas {
     }
 
     private input() {
-        if (this.keyInput.keyDown.isDown == true || this.keyInput.keyS.isDown == true) {
-            this.py += this.pSpeed;
-        }
-        if (this.keyInput.keyUp.isDown == true || this.keyInput.keyW.isDown == true) {
-            this.py -= this.pSpeed;
-        }
-        if (this.keyInput.keyRight.isDown == true || this.keyInput.keyD.isDown == true) {
-            this.px += this.pSpeed;
-        }
-        if (this.keyInput.keyLeft.isDown == true || this.keyInput.keyA.isDown == true) {
-            this.px -= this.pSpeed;
-        }
+        // if (this.keyInput.keyDown.isDown == true || this.keyInput.keyS.isDown == true) {
+        //     this.py += this.pSpeed;
+        // }
+        // if (this.keyInput.keyUp.isDown == true || this.keyInput.keyW.isDown == true) {
+        //     this.py -= this.pSpeed;
+        // }
+        // if (this.keyInput.keyRight.isDown == true || this.keyInput.keyD.isDown == true) {
+        //     this.px += this.pSpeed;
+        // }
+        // if (this.keyInput.keyLeft.isDown == true || this.keyInput.keyA.isDown == true) {
+        //     this.px -= this.pSpeed;
+        // }
     }
 
     private update() {
         
+        
     }
 
-
-    private countFPS() {
-        if(!this.lastCalledTime) {
-            this.lastCalledTime = Date.now();
-            this.fps = 0;
-            return;
-        }
-        this.delta = (Date.now() - this.lastCalledTime)/1000; 
-        this.lastCalledTime = Date.now();
-        if (this.fpsCounter >= 3) {
-            this.fps = Math.round((1/this.delta)); 
-            this.fpsCounter = 0;
-        }
-        this.fpsCounter++;
-        return this.fps;
-    }
     
     private gameLoop() {
 
-
         this.input();
+
+
         this.update();
 
+
         this.ctx.clearRect(0, 0, this.width, this.height);
-        
         this.render();
+        
+
 
         window.requestAnimationFrame(() => this.gameLoop());
     }
@@ -187,5 +177,10 @@ class Canvas {
 
 
 document.addEventListener('DOMContentLoaded', function() {
+
+    console.log(Engine.getInstance());
+    console.log(Engine.getInstance());
+    console.log(Engine.getInstance());
+
     let canvas = new Canvas('gamecanvas');
 }, false);
